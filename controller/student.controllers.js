@@ -50,7 +50,7 @@ export const crStudent = async (req, res) => {
 
 
 // naming failure
-export const readStudentbyId = async (req, res) => {
+export const readStudentById = async (req, res) => {
   const { studentId } = req.params;
   try {
     const student = await Student.findById(studentId);

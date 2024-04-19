@@ -1,7 +1,7 @@
 import express from 'express';
-import { crStudent, deleteStudent, readStudentbyId, updateStudent } from '../controller/student.controllers.js';
+import { crStudent, deleteStudent, readStudentById, updateStudent } from '../controller/student.controllers.js';
 import multer from 'multer';
-import {  storage } from '../s3.config.js'; // Import từ s3.config.js
+import {  storage } from '../s3.config.js'; 
 
 
 
@@ -12,7 +12,7 @@ const upload = multer({ storage });
 
 
 router.post('/',upload.single("avatar"), crStudent);
-router.get('/:studentId/student', readStudentbyId); 
+router.get('/:studentId/student', readStudentById); 
 router.delete('/:studentId', deleteStudent);
 router.patch('/:studentId',upload.single("avatar"), updateStudent);
 export default router;
