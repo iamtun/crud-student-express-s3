@@ -1,24 +1,43 @@
 import Student from "../model/student.model.js";
+import { validationResult , body} from "express-validator";
 // no validation data input from user
 // no remove log
 // naming failure
 export const crStudent = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ status: 'fail', errors: errors.array() });
+  }
+
   const { fullName, dayOfBirth, gender, major } = req.body;
+
+  // fix: Các ràng buộc dữ liệu
+  const validateStudent = [
+    body('fullName').notEmpty().isString(),
+    body('dayOfBirth').notEmpty().isString(),
+    body('gender').optional().isBoolean(),
+    body('major').notEmpty().isString(),
+  ];
+// fix: kiểm tra ràng buộc dữ liệu
+  for (let validator of validateStudent) {
+    const result = await validator.run(req);
+    if (!result.isEmpty()) {
+      return res.status(400).json({ status: 'fail', errors: result.array() });
+    }
+  }
+
   try {
-    console.log(req.file.location);
-    const newStudent = await Student.create({
-      fullName: fullName,
-      dayOfBirth: dayOfBirth,
-      gender: gender,
-      major: major,
+    const student = await Student.create({
+      fullName,
+      dayOfBirth,
+      gender,
+      major,
       avatar: req.file.location,
     });
-    console.log({ newStudent });
+
     res.status(201).json({
       status: "success",
-      data: {
-        ...newStudent._doc,
-      },
+      data: student,
     });
   } catch (error) {
     res.status(400).json({
@@ -28,6 +47,7 @@ export const crStudent = async (req, res) => {
     });
   }
 };
+
 
 // naming failure
 export const readStudentbyId = async (req, res) => {
@@ -56,12 +76,14 @@ export const readStudentbyId = async (req, res) => {
 // delete failed
 // step1: delete go to catch: error -> Assignment to constant variable.
 // step2: re-delete go not not found
+//fix: em thay đổi ở dòng 63 thành let, có thể gán giá trị vào, nên khi hàm findByIdAndDelete tìm tới
+//id thì có thể xoá đi chúng
 export const deleteStudent = async (req, res) => {
   const { studentId } = req.params;
   try {
     const student = await Student.findById(studentId);
     if (student) {
-      student = await Student.findByIdAndDelete(studentId);
+    let student = await Student.findByIdAndDelete(studentId);
       res.status(201).json({ status: "success" });
     } else {
       res.status(404).json({ status: "fail", message: "Student not found" });

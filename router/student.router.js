@@ -25,6 +25,7 @@ const storage = multerS3({
   contentType: multerS3.AUTO_CONTENT_TYPE,
   key: function (req, file, cb) {
     cb(null, 'uploads/' + Date.now().toString() + '-' + file.originalname);
+
   },
 });
 
@@ -35,8 +36,8 @@ const upload = multer({ storage });
 
 
 router.post('/',upload.single("avatar"), crStudent);
-// router.get('/:studentId/student', readStudentbyId); naming router failed
-router.get('/:studentId', readStudentbyId);
+router.get('/:studentId/student', readStudentbyId); 
+
 router.delete('/:studentId', deleteStudent);
 router.patch('/:studentId',upload.single("avatar"), updateStudent);
 export default router;
