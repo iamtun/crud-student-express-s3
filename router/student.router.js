@@ -1,5 +1,5 @@
 import express from 'express';
-import { createStudent, deleteStudent, findStudentById, getAllStudent, updateStudent } from '../controller/student.controllers.js';
+import { createStudent, deleteStudent, getStudentById, getAllStudent, updateStudent } from '../controller/student.controllers.js';
 import multer from 'multer';
 import {  storage } from '../s3.config.js'; 
 
@@ -12,7 +12,7 @@ const upload = multer({ storage });
 
 
 router.post('/',upload.single("avatar"), createStudent);
-router.get('/:studentId/student', findStudentById); 
+router.get('/:studentId/', getStudentById); 
 router.delete('/:studentId', deleteStudent);
 router.patch('/:studentId',upload.single("avatar"), updateStudent);
 router.get('/', getAllStudent);
