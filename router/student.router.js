@@ -12,7 +12,7 @@ const upload = multer({ storage });
 
 
 router.post('/',upload.single("avatar"), createStudent);
-router.get('/:studentId/', getStudentById); 
+router.get('/:studentId', getStudentById); 
 router.delete('/:studentId', deleteStudent);
 router.patch('/:studentId',upload.single("avatar"), updateStudent);
 router.get('/', getAllStudent);
