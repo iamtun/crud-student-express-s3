@@ -121,3 +121,13 @@ export const updateStudent = async (req, res) => {
     res.status(400).json({ status: "fail", message: error.message });
   }
 };
+
+
+export const getAllStudent = async (req, res)=>{
+  try {
+    const students = await Student.find();
+    res.status(200).json({ status: "success", data: students });
+  } catch (error) {
+    res.status(400).json({ status: 'fail', message: error.message });
+  }
+};
