@@ -3,7 +3,7 @@ import { validationResult , body} from "express-validator";
 // no validation data input from user
 // no remove log
 // naming failure
-export const crStudent = async (req, res) => {
+export const createStudent = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ status: 'fail', errors: errors.array() });
@@ -50,7 +50,7 @@ export const crStudent = async (req, res) => {
 
 
 // naming failure
-export const readStudentById = async (req, res) => {
+export const getStudentById = async (req, res) => {
   const { studentId } = req.params;
   try {
     const student = await Student.findById(studentId);
@@ -81,9 +81,8 @@ export const readStudentById = async (req, res) => {
 export const deleteStudent = async (req, res) => {
   const { studentId } = req.params;
   try {
-    const student = await Student.findById(studentId);
+    const student = await Student.findByIdAndDelete(studentId);
     if (student) {
-    let student = await Student.findByIdAndDelete(studentId);
       res.status(201).json({ status: "success" });
     } else {
       res.status(404).json({ status: "fail", message: "Student not found" });
@@ -120,5 +119,15 @@ export const updateStudent = async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ status: "fail", message: error.message });
+  }
+};
+
+
+export const getAllStudent = async (req, res)=>{
+  try {
+    const students = await Student.find();
+    res.status(200).json({ status: "success", data: students });
+  } catch (error) {
+    res.status(400).json({ status: 'fail', message: error.message });
   }
 };
