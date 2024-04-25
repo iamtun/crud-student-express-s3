@@ -32,7 +32,7 @@ export const createStudent = async (req, res) => {
       dayOfBirth,
       gender,
       major,
-      avatar: req.file.location,
+      avatar: req?.file?.location ?? '',
     });
 
     res.status(201).json({
